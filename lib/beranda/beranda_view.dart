@@ -135,6 +135,25 @@ class _BuildGopayMenu extends StatelessWidget {
   }
 }
 
+class _BuildGojekServicesMenu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: double.infinity,
+        height: 200.0,
+        child: Container(
+            margin: EdgeInsets.only(top: 8.0, bottom: 8.0),
+            child: GridView.builder(
+                physics: ClampingScrollPhysics(),
+                itemCount: 8,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4),
+                itemBuilder: (context, position) {
+                  return Text("Gojek Menu");
+                })));
+  }
+}
+
 class _BerandaPageState extends State<BerandaPage> {
   @override
   Widget build(BuildContext context) {
@@ -152,6 +171,7 @@ class _BerandaPageState extends State<BerandaPage> {
                   child: Column(
                     children: <Widget>[
                       _BuildGopayMenu(),
+                      _BuildGojekServicesMenu()
                     ],
                   )),
             ],
