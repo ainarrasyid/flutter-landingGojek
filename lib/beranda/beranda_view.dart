@@ -3,6 +3,9 @@ import 'package:gojek/beranda/beranda_gojek_appbar.dart';
 import 'package:gojek/constant.dart';
 import 'package:gojek/beranda/beranda_model.dart';
 
+List<GojekService> _gojekServiceList = [];
+List<Food> _goFoodFeaturedList = [];
+
 class BerandaPage extends StatefulWidget {
   @override
   _BerandaPageState createState() => _BerandaPageState();
@@ -155,6 +158,39 @@ class _BuildGojekServicesMenu extends StatelessWidget {
   }
 }
 
+class _BuildGoFoodFeatured extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.fromLTRB(16.0, 16.0, 0.0, 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(
+              "GO-FOOD",
+              style: TextStyle(fontFamily: "NeoSansBold"),
+            ),
+            Padding(padding: EdgeInsets.only(top: 8.0)),
+            Text(
+              "Pilihan Terlaris",
+              style: TextStyle(fontFamily: "NeoSansBold"),
+            ),
+            SizedBox(
+              height: 172.0,
+              child: ListView.builder(
+                  itemCount: _goFoodFeaturedList.length,
+                  padding: EdgeInsets.only(top: 12.0),
+                  physics: ClampingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return _RowGoFoodFeatured(_goFoodFeaturedList[index]);
+                  }),
+            ),
+          ],
+        ));
+  }
+}
+
 // class RowGojekService extends StatefulWidget {
 //   RowGojekService(this.gojekService);
 //   final GojekService gojekService;
@@ -190,7 +226,30 @@ class _RowGojekService extends StatelessWidget {
   }
 }
 
-List<GojekService> _gojekServiceList = [];
+class _RowGoFoodFeatured extends StatelessWidget {
+  _RowGoFoodFeatured(this.food);
+  final Food food;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 16.0),
+      child: Column(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.asset(
+              food.image,
+              width: 132.0,
+              height: 132.0,
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(top: 8.0)),
+          Text(food.title)
+        ],
+      ),
+    );
+  }
+}
 
 class _BerandaPageState extends State<BerandaPage> {
   @override
@@ -237,6 +296,17 @@ class _BerandaPageState extends State<BerandaPage> {
         title: "GO-MART"));
     _gojekServiceList.add(GojekService(
         image: Icons.local_play, color: GojekPalette.menuTix, title: "GO-TIX"));
+
+    _goFoodFeaturedList
+        .add(Food(title: "Steak Andakar", image: "assets/images/food_1.jpg"));
+    _goFoodFeaturedList
+        .add(Food(title: "Mie Ayam Tumini", image: "assets/images/food_2.jpg"));
+    _goFoodFeaturedList
+        .add(Food(title: "Tengkleng Hohah", image: "assets/images/food_3.jpg"));
+    _goFoodFeaturedList
+        .add(Food(title: "Warung Steak", image: "assets/images/food_4.jpg"));
+    _goFoodFeaturedList.add(
+        Food(title: "Kindai Warung Banjar", image: "assets/images/food_5.jpg"));
   }
 
   @override
@@ -258,6 +328,13 @@ class _BerandaPageState extends State<BerandaPage> {
                       _BuildGojekServicesMenu()
                     ],
                   )),
+              Container(
+                color: Colors.white,
+                margin: EdgeInsets.only(top: 16.0),
+                child: Column(
+                  children: <Widget>[_BuildGoFoodFeatured()],
+                ),
+              )
             ],
           ),
         ),
