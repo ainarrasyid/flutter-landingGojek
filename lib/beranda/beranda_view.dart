@@ -177,26 +177,85 @@ class _BuildGoFoodFeatured extends StatelessWidget {
             ),
             SizedBox(
               height: 172.0,
-              child: ListView.builder(
-                  itemCount: _goFoodFeaturedList.length,
-                  padding: EdgeInsets.only(top: 12.0),
-                  physics: ClampingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return _RowGoFoodFeatured(_goFoodFeaturedList[index]);
-                  }),
-            ),
+              child: FutureBuilder<List>(
+                future: fetchFood(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: _goFoodFeaturedList.length,
+                        padding: EdgeInsets.only(top: 12.0),
+                        physics: ClampingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return _RowGoFoodFeatured(_goFoodFeaturedList[index]);
+                        });
+                  }
+                  return Center(
+                    child: SizedBox(
+                      width: 40.0,
+                      height: 40.0,
+                      child: const CircularProgressIndicator(),
+                    ),
+                  );
+                },
+              ),
+            )
           ],
         ));
   }
 }
 
-// class RowGojekService extends StatefulWidget {
-//   RowGojekService(this.gojekService);
-//   final GojekService gojekService;
-//   @override
-//   _RowGojekService createState() => _RowGojekService();
-// }
+class _BuildMenuBottomSheet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StatefulBuilder(builder: (c, s) {
+      return SafeArea(
+        child: Container(
+          padding: EdgeInsets.only(left: 16.0, right: 16.0),
+          width: double.infinity,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4.0), color: Colors.white),
+          child: Column(
+            children: <Widget>[
+              Icon(
+                Icons.drag_handle,
+                color: GojekPalette.grey,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text("GO-JEK Services",
+                      style:
+                          TextStyle(fontFamily: "NeoSansBold", fontSize: 18.0)),
+                  OutlineButton(
+                    color: GojekPalette.green,
+                    onPressed: () {},
+                    child: Text(
+                      "EDIT FAVORITES",
+                      style:
+                          TextStyle(fontSize: 12.0, color: GojekPalette.green),
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                height: 300.0,
+                child: GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: _gojekServiceList.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4),
+                    itemBuilder: (context, position) {
+                      return _RowGojekService(_gojekServiceList[position]);
+                    }),
+              )
+            ],
+          ),
+        ),
+      );
+    });
+  }
+}
 
 class _RowGojekService extends StatelessWidget {
   _RowGojekService(this.gojekService);
@@ -207,15 +266,25 @@ class _RowGojekService extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: GojekPalette.grey200, width: 1.0),
-                borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            padding: EdgeInsets.all(12.0),
-            child: Icon(
-              gojekService.image,
-              color: gojekService.color,
-              size: 32.0,
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              showModalBottomSheet<void>(
+                  context: context,
+                  builder: (context) {
+                    return _BuildMenuBottomSheet();
+                  });
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: GojekPalette.grey200, width: 1.0),
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              padding: EdgeInsets.all(12.0),
+              child: Icon(
+                gojekService.image,
+                color: gojekService.color,
+                size: 32.0,
+              ),
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 6.0)),
@@ -249,6 +318,23 @@ class _RowGoFoodFeatured extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<List<Food>> fetchFood() async {
+  _goFoodFeaturedList
+      .add(Food(title: "Steak Andakar", image: "assets/images/food_1.jpg"));
+  _goFoodFeaturedList
+      .add(Food(title: "Mie Ayam Tumini", image: "assets/images/food_2.jpg"));
+  _goFoodFeaturedList
+      .add(Food(title: "Tengkleng Hohah", image: "assets/images/food_3.jpg"));
+  _goFoodFeaturedList
+      .add(Food(title: "Warung Steak", image: "assets/images/food_4.jpg"));
+  _goFoodFeaturedList.add(
+      Food(title: "Kindai Warung Banjar", image: "assets/images/food_5.jpg"));
+
+  return Future.delayed(Duration(seconds: 1), () {
+    return _goFoodFeaturedList;
+  });
 }
 
 class _BerandaPageState extends State<BerandaPage> {
@@ -297,16 +383,16 @@ class _BerandaPageState extends State<BerandaPage> {
     _gojekServiceList.add(GojekService(
         image: Icons.local_play, color: GojekPalette.menuTix, title: "GO-TIX"));
 
-    _goFoodFeaturedList
-        .add(Food(title: "Steak Andakar", image: "assets/images/food_1.jpg"));
-    _goFoodFeaturedList
-        .add(Food(title: "Mie Ayam Tumini", image: "assets/images/food_2.jpg"));
-    _goFoodFeaturedList
-        .add(Food(title: "Tengkleng Hohah", image: "assets/images/food_3.jpg"));
-    _goFoodFeaturedList
-        .add(Food(title: "Warung Steak", image: "assets/images/food_4.jpg"));
-    _goFoodFeaturedList.add(
-        Food(title: "Kindai Warung Banjar", image: "assets/images/food_5.jpg"));
+    // _goFoodFeaturedList
+    //     .add(Food(title: "Steak Andakar", image: "assets/images/food_1.jpg"));
+    // _goFoodFeaturedList
+    //     .add(Food(title: "Mie Ayam Tumini", image: "assets/images/food_2.jpg"));
+    // _goFoodFeaturedList
+    //     .add(Food(title: "Tengkleng Hohah", image: "assets/images/food_3.jpg"));
+    // _goFoodFeaturedList
+    //     .add(Food(title: "Warung Steak", image: "assets/images/food_4.jpg"));
+    // _goFoodFeaturedList.add(
+    //     Food(title: "Kindai Warung Banjar", image: "assets/images/food_5.jpg"));
   }
 
   @override
