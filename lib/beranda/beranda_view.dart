@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gojek/beranda/beranda_gojek_appbar.dart';
 import 'package:gojek/constant.dart';
+import 'package:gojek/beranda/beranda_model.dart';
 
 class BerandaPage extends StatefulWidget {
   @override
@@ -149,12 +150,95 @@ class _BuildGojekServicesMenu extends StatelessWidget {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4),
                 itemBuilder: (context, position) {
-                  return Text("Gojek Menu");
+                  return _RowGojekService(_gojekServiceList[position]);
                 })));
   }
 }
 
+// class RowGojekService extends StatefulWidget {
+//   RowGojekService(this.gojekService);
+//   final GojekService gojekService;
+//   @override
+//   _RowGojekService createState() => _RowGojekService();
+// }
+
+class _RowGojekService extends StatelessWidget {
+  _RowGojekService(this.gojekService);
+  final GojekService gojekService;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: GojekPalette.grey200, width: 1.0),
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            padding: EdgeInsets.all(12.0),
+            child: Icon(
+              gojekService.image,
+              color: gojekService.color,
+              size: 32.0,
+            ),
+          ),
+          Padding(padding: EdgeInsets.only(top: 6.0)),
+          Text(gojekService.title, style: TextStyle(fontSize: 10.0))
+        ],
+      ),
+    );
+  }
+}
+
+List<GojekService> _gojekServiceList = [];
+
 class _BerandaPageState extends State<BerandaPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    _gojekServiceList.add(GojekService(
+        image: Icons.directions_bike,
+        color: GojekPalette.menuRide,
+        title: "GO-RIDE"));
+    _gojekServiceList.add(GojekService(
+        image: Icons.local_car_wash,
+        color: GojekPalette.menuCar,
+        title: "GO-CAR"));
+    _gojekServiceList.add(GojekService(
+        image: Icons.directions_car,
+        color: GojekPalette.menuBluebird,
+        title: "GO-BLUEBIRD"));
+    _gojekServiceList.add(GojekService(
+        image: Icons.restaurant,
+        color: GojekPalette.menuFood,
+        title: "GO-FOOD"));
+    _gojekServiceList.add(GojekService(
+        image: Icons.next_week,
+        color: GojekPalette.menuSend,
+        title: "GO-SEND"));
+    _gojekServiceList.add(GojekService(
+        image: Icons.local_offer,
+        color: GojekPalette.menuDeals,
+        title: "GO-DEALS"));
+    _gojekServiceList.add(GojekService(
+        image: Icons.phonelink_ring,
+        color: GojekPalette.menuPulsa,
+        title: "GO-PULSA"));
+    _gojekServiceList.add(GojekService(
+        image: Icons.apps, color: GojekPalette.menuOther, title: "LAINNYA"));
+    _gojekServiceList.add(GojekService(
+        image: Icons.shopping_basket,
+        color: GojekPalette.menuShop,
+        title: "GO-SHOP"));
+    _gojekServiceList.add(GojekService(
+        image: Icons.shopping_cart,
+        color: GojekPalette.menuMart,
+        title: "GO-MART"));
+    _gojekServiceList.add(GojekService(
+        image: Icons.local_play, color: GojekPalette.menuTix, title: "GO-TIX"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
